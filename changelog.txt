@@ -1,0 +1,8 @@
+v2.0.0 (2016-08-15)
+-add: guide
+-add: link to youtube channels
+-rem: chat (rbtv moves from twitch to youtube live)
+v1.2.1 (2015-11-21)
+-upd: support full hd (source) playback
+v1.2.0 (2015-11-10)
+-add: chat (twitch account + script.ircchat required)

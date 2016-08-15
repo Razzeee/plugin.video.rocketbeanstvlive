@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+  <category>
+    <setting label="Video-Qualität" type="enum" id="quality" values="Niedrig|Mittel|Hoch|Quelle" default="2" />
+  </category>
+</settings>
