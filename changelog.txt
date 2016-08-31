@@ -1,5 +1,8 @@
+v2.1.1 (2016-09-01)
+-rem: unnecessary settings
+
 v2.1.0 (2016-08-31
--live stream on youtube instead of twitch
+-upd: live stream on youtube instead of twitch
 
 v2.0.0 (2016-08-15)
 -add: guide

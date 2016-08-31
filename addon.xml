@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon
   id="plugin.video.rocketbeanstvlive"
-  version="2.1.0"
+  version="2.1.1"
   name="Rocket Beans TV"
   provider-name="Jin, Ulukai">
   <requires>
