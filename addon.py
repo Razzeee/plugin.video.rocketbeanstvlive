@@ -9,7 +9,6 @@ import xbmcplugin
 
 from resources.data import config
 from resources.lib import guide
-from resources.lib import twitch
 from resources.lib import youtube
 
 locale.setlocale(locale.LC_ALL, 'de_DE.UTF-8')
@@ -26,13 +25,9 @@ def build_url(query):
 if mode is None:
     li = xbmcgui.ListItem('Live')
 
-    # YOUTUBE
-    #video_id = youtube.get_live_video_id_from_channel_id(config.CHANNEL_ID)
-    #li.setProperty('isPlayable', 'true')
-    #url = "plugin://plugin.video.youtube/play/?video_id=%s" % video_id
-
-    # TWITCH
-    url = build_url({'mode': 'live'})
+    video_id = youtube.get_live_video_id_from_channel_id(config.CHANNEL_ID)
+    li.setProperty('isPlayable', 'true')
+    url = "plugin://plugin.video.youtube/play/?video_id=%s" % video_id
 
     xbmcplugin.addDirectoryItem(addon_handle, url, li)
 
@@ -47,9 +42,6 @@ if mode is None:
     li = xbmcgui.ListItem('Sendeplan')
     url = build_url({'mode': 'guide'})
     xbmcplugin.addDirectoryItem(addon_handle, url, li, True)
-
-elif mode[0] == 'live':
-    twitch.RBTV().play()
 
 elif mode[0] == 'guide':
     guide_items = guide.show_guide(addon_handle)
