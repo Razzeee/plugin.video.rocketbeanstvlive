@@ -11,8 +11,6 @@ from resources.data import config
 from resources.lib import guide
 from resources.lib import youtube
 
-locale.setlocale(locale.LC_ALL, 'de_DE.UTF-8')
-
 base_url = sys.argv[0]
 addon_handle = int(sys.argv[1])
 

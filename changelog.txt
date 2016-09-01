@@ -1,10 +1,13 @@
+v2.1.3 (2016-09-01)
+-fix: unsupported locale setting
+
 v2.1.2 (2016-09-01)
 -add: require youtube addon
 
 v2.1.1 (2016-09-01)
 -rem: unnecessary settings
 
-v2.1.0 (2016-08-31
+v2.1.0 (2016-08-31)
 -upd: live stream on youtube instead of twitch
 
 v2.0.0 (2016-08-15)
