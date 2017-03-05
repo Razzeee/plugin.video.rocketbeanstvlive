@@ -1,52 +1,51 @@
+# -*- coding: utf-8 -*-
+
+import routing
 import sys
 import urllib
 import urlparse
 
-import xbmcgui
-import xbmcplugin
-
 from resources.data import config
-from resources.lib import guide
-from resources.lib import youtube
+from resources.lib.guide import show_guide
+from resources.lib.youtube import get_live_video_id_from_channel_id
+from xbmcgui import ListItem
+from xbmcplugin import addDirectoryItem, endOfDirectory, setContent
 
-base_url = sys.argv[0]
-addon_handle = int(sys.argv[1])
-
-args = urlparse.parse_qs(sys.argv[2][1:])
-mode = args.get('mode', None)
+plugin = routing.Plugin()
+setContent(plugin.handle, 'videos')
 
 
-def build_url(query):
-    return base_url + '?' + urllib.urlencode(query)
+@plugin.route('/')
+def index():
+    video_id = get_live_video_id_from_channel_id(config.CHANNEL_ID)
+    url = "plugin://plugin.video.youtube/play/?video_id=%s" % video_id
+    li = ListItem(label='Live',
+                  thumbnailImage="https://i.ytimg.com/vi/%s/maxresdefault_live.jpg" % video_id)
+    li.setProperty('isPlayable', 'true')
+    addDirectoryItem(plugin.handle, url, li)
+
+    url = "plugin://plugin.video.youtube/user/%s/" % config.CHANNEL_ID
+    addDirectoryItem(plugin.handle, url, ListItem('Mediathek'), True)
+
+    url = "plugin://plugin.video.youtube/channel/%s/" % config.LETS_PLAY_CHANNEL_ID
+    addDirectoryItem(
+        plugin.handle, url, ListItem('Let\'s-Play-Mediathek'), True)
+
+    addDirectoryItem(
+        plugin.handle, plugin.url_for(guide), ListItem('Sendeplan'), True)
+
+    endOfDirectory(plugin.handle)
+
+
+@plugin.route('/guide')
+def guide():
+    guide_items = show_guide()
+
+    for guide_item in guide_items:
+        li = ListItem(guide_item)
+        addDirectoryItem(plugin.handle, '', li)
+    endOfDirectory(plugin.handle)
 
 
 def run():
-    if mode is None:
-        li = xbmcgui.ListItem('Live')
-
-        video_id = youtube.get_live_video_id_from_channel_id(config.CHANNEL_ID)
-        li.setProperty('isPlayable', 'true')
-        url = "plugin://plugin.video.youtube/play/?video_id=%s" % video_id
-
-        xbmcplugin.addDirectoryItem(addon_handle, url, li)
-
-        li = xbmcgui.ListItem('Mediathek')
-        url = "plugin://plugin.video.youtube/user/%s/" % config.CHANNEL_ID
-        xbmcplugin.addDirectoryItem(addon_handle, url, li, True)
-
-        li = xbmcgui.ListItem('Let\'s-Play-Mediathek')
-        url = "plugin://plugin.video.youtube/channel/%s/" % config.LETS_PLAY_CHANNEL_ID
-        xbmcplugin.addDirectoryItem(addon_handle, url, li, True)
-
-        li = xbmcgui.ListItem('Sendeplan')
-        url = build_url({'mode': 'guide'})
-        xbmcplugin.addDirectoryItem(addon_handle, url, li, True)
-
-    elif mode[0] == 'guide':
-        guide_items = guide.show_guide(addon_handle)
-
-        for guide_item in guide_items:
-            li = xbmcgui.ListItem(guide_item)
-            xbmcplugin.addDirectoryItem(addon_handle, '', li)
-
-    xbmcplugin.endOfDirectory(addon_handle)
+    plugin.run()

@@ -6,7 +6,7 @@ import urllib2
 from resources.data import config
 
 
-def show_guide(addon_handle):
+def show_guide():
     items = []
 
     request = urllib2.Request(config.GUIDE_URL, headers={'User-Agent': 'Kodi'})
