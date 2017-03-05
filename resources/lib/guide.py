@@ -5,10 +5,11 @@ import urllib2
 
 from resources.data import config
 
+
 def show_guide(addon_handle):
     items = []
 
-    request = urllib2.Request(config.GUIDE_URL, headers={'User-Agent':'Kodi'})
+    request = urllib2.Request(config.GUIDE_URL, headers={'User-Agent': 'Kodi'})
     response = urllib2.urlopen(request)
     string_data = response.read()
 
@@ -17,7 +18,8 @@ def show_guide(addon_handle):
 
     cur_date = None
     for item in schedule:
-        startTime = datetime.datetime(*time.strptime(item['timeStart'][:19], "%Y-%m-%dT%H:%M:%S")[:6])
+        startTime = datetime.datetime(
+            *time.strptime(item['timeStart'][:19], "%Y-%m-%dT%H:%M:%S")[:6])
         title = item['title']
         type = item['type']
 

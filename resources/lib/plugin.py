@@ -15,8 +15,10 @@ addon_handle = int(sys.argv[1])
 args = urlparse.parse_qs(sys.argv[2][1:])
 mode = args.get('mode', None)
 
+
 def build_url(query):
     return base_url + '?' + urllib.urlencode(query)
+
 
 def run():
     if mode is None:
