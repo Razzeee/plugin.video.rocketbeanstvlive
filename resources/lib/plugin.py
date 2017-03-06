@@ -8,6 +8,7 @@ import urlparse
 from resources.data import config
 from resources.lib.guide import show_guide
 from resources.lib.youtube import get_live_video_id_from_channel_id
+from resources.lib.kodiUtilities import kodiJsonRequest
 from xbmcgui import ListItem
 from xbmcplugin import addDirectoryItem, endOfDirectory, setContent
 
@@ -18,9 +19,21 @@ setContent(plugin.handle, 'videos')
 @plugin.route('/')
 def index():
     video_id = get_live_video_id_from_channel_id(config.CHANNEL_ID)
+    thumbnail = "https://i.ytimg.com/vi/%s/maxresdefault_live.jpg" % video_id
+
+    # Get cached thumb from database to ensure it's removed for the livestream
+    response = kodiJsonRequest({'jsonrpc': '2.0', 'id': 0, 'method': 'Textures.GetTextures',
+                                'params': {'filter': {'operator': 'contains', 'field': 'url', 'value': 'https://i.ytimg.com/vi/%/maxresdefault_live.jpg'},
+                                           'properties': ['imagehash', 'url']}})
+
+    # Remove cached thumb and grab a new one
+    if len(response['textures']) > 0:
+        kodiJsonRequest({'jsonrpc': '2.0', 'id': 0, "method": "Textures.RemoveTexture",
+                         "params": {"textureid": response['textures'][0]['textureid']}})
+
     url = "plugin://plugin.video.youtube/play/?video_id=%s" % video_id
     li = ListItem(label='Live',
-                  thumbnailImage="https://i.ytimg.com/vi/%s/maxresdefault_live.jpg" % video_id)
+                  thumbnailImage=thumbnail)
     li.setProperty('isPlayable', 'true')
     addDirectoryItem(plugin.handle, url, li)
 
